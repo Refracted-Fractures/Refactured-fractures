@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Baby Otters in 3D Space</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000814;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #4cc9f0;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        🦦 Blue Baby Otters 🦦<br>
+        Drag to rotate • Scroll to zoom • Right-drag to pan
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000814);
+        scene.fog = new THREE.Fog(0x000814, 50, 200);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 50;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // OrbitControls for interaction
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 10;
+        controls.maxDistance = 150;
+
+        // Blue color palette for otters
+        const blueColors = [
+            0x4cc9f0, // bright cyan-blue
+            0x4895ef, // medium blue
+            0x4361ee, // royal blue
+            0x3a0ca3, // dark blue
+            0x7209b7, // purple-blue
+            0x560bad, // deep purple-blue
+            0x48cae4, // light cyan
+            0x00b4d8, // ocean blue
+        ];
+
+        // Function to create a baby otter
+        function createBabyOtter(scale = 1) {
+            const otter = new THREE.Group();
+            const color = blueColors[Math.floor(Math.random() * blueColors.length)];
+            const material = new THREE.MeshPhongMaterial({
+                color: color,
+                shininess: 30,
+                specular: 0x444444
+            });
+
+            // Body (elongated sphere)
+            const bodyGeometry = new THREE.SphereGeometry(0.8 * scale, 16, 16);
+            bodyGeometry.scale(1.2, 0.8, 0.7);
+            const body = new THREE.Mesh(bodyGeometry, material);
+            otter.add(body);
+
+            // Head
+            const headGeometry = new THREE.SphereGeometry(0.5 * scale, 16, 16);
+            const head = new THREE.Mesh(headGeometry, material);
+            head.position.set(1.2 * scale, 0.3 * scale, 0);
+            otter.add(head);
+
+            // Snout
+            const snoutGeometry = new THREE.SphereGeometry(0.25 * scale, 8, 8);
+            snoutGeometry.scale(1.2, 0.8, 0.8);
+            const snout = new THREE.Mesh(snoutGeometry, material);
+            snout.position.set(1.6 * scale, 0.2 * scale, 0);
+            otter.add(snout);
+
+            // Ears
+            const earGeometry = new THREE.SphereGeometry(0.15 * scale, 8, 8);
+            const earLeft = new THREE.Mesh(earGeometry, material);
+            earLeft.position.set(1.2 * scale, 0.6 * scale, -0.3 * scale);
+            otter.add(earLeft);
+
+            const earRight = new THREE.Mesh(earGeometry, material);
+            earRight.position.set(1.2 * scale, 0.6 * scale, 0.3 * scale);
+            otter.add(earRight);
+
+            // Tail (curved with multiple segments)
+            const tailSegments = 3;
+            for (let i = 0; i < tailSegments; i++) {
+                const tailGeometry = new THREE.SphereGeometry(0.3 * scale * (1 - i * 0.2), 8, 8);
+                tailGeometry.scale(1.5, 0.8, 0.8);
+                const tailSegment = new THREE.Mesh(tailGeometry, material);
+                tailSegment.position.set(
+                    -1.2 * scale - i * 0.7 * scale,
+                    -0.2 * scale - i * 0.3 * scale,
+                    0
+                );
+                tailSegment.rotation.z = i * 0.3;
+                otter.add(tailSegment);
+            }
+
+            // Front paws
+            const pawGeometry = new THREE.SphereGeometry(0.25 * scale, 8, 8);
+            pawGeometry.scale(0.6, 1.2, 0.8);
+
+            const frontPawLeft = new THREE.Mesh(pawGeometry, material);
+            frontPawLeft.position.set(0.5 * scale, -0.7 * scale, -0.5 * scale);
+            otter.add(frontPawLeft);
+
+            const frontPawRight = new THREE.Mesh(pawGeometry, material);
+            frontPawRight.position.set(0.5 * scale, -0.7 * scale, 0.5 * scale);
+            otter.add(frontPawRight);
+
+            // Back paws
+            const backPawLeft = new THREE.Mesh(pawGeometry, material);
+            backPawLeft.position.set(-0.5 * scale, -0.7 * scale, -0.5 * scale);
+            otter.add(backPawLeft);
+
+            const backPawRight = new THREE.Mesh(pawGeometry, material);
+            backPawRight.position.set(-0.5 * scale, -0.7 * scale, 0.5 * scale);
+            otter.add(backPawRight);
+
+            // Random rotation for variety
+            otter.rotation.x = Math.random() * Math.PI * 2;
+            otter.rotation.y = Math.random() * Math.PI * 2;
+            otter.rotation.z = Math.random() * Math.PI * 2;
+
+            // Add some custom animation data
+            otter.userData = {
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.01,
+                    y: (Math.random() - 0.5) * 0.01,
+                    z: (Math.random() - 0.5) * 0.01
+                },
+                floatSpeed: Math.random() * 0.02 + 0.01,
+                floatOffset: Math.random() * Math.PI * 2
+            };
+
+            return otter;
+        }
+
+        // Create a field of baby otters
+        const otters = [];
+        const numOtters = 100;
+
+        for (let i = 0; i < numOtters; i++) {
+            // Random scale between 0.5 and 2.0
+            const scale = Math.random() * 1.5 + 0.5;
+            const otter = createBabyOtter(scale);
+
+            // Position randomly in 3D space
+            otter.position.set(
+                (Math.random() - 0.5) * 150,
+                (Math.random() - 0.5) * 150,
+                (Math.random() - 0.5) * 150
+            );
+
+            otters.push(otter);
+            scene.add(otter);
+        }
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x4cc9f0, 0.4);
+        scene.add(ambientLight);
+
+        const directionalLight1 = new THREE.DirectionalLight(0x4895ef, 0.8);
+        directionalLight1.position.set(5, 10, 5);
+        scene.add(directionalLight1);
+
+        const directionalLight2 = new THREE.DirectionalLight(0x7209b7, 0.5);
+        directionalLight2.position.set(-5, -10, -5);
+        scene.add(directionalLight2);
+
+        const pointLight = new THREE.PointLight(0x4cc9f0, 1, 100);
+        pointLight.position.set(0, 0, 0);
+        scene.add(pointLight);
+
+        // Animation
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // Animate each otter
+            otters.forEach((otter, index) => {
+                // Gentle rotation
+                otter.rotation.x += otter.userData.rotationSpeed.x;
+                otter.rotation.y += otter.userData.rotationSpeed.y;
+                otter.rotation.z += otter.userData.rotationSpeed.z;
+
+                // Floating motion
+                const floatOffset = otter.userData.floatOffset;
+                otter.position.y += Math.sin(time * otter.userData.floatSpeed + floatOffset) * 0.02;
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
