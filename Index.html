@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refracted-Fractures | Digital Art & Stories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ff00, #ffff00);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            background: #ff00ff;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 250px;
+            height: 250px;
+            background: #00ffff;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .shape3 {
+            width: 200px;
+            height: 200px;
+            background: #ffff00;
+            bottom: 10%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -50px) rotate(90deg); }
+            50% { transform: translate(-30px, 50px) rotate(180deg); }
+            75% { transform: translate(30px, 30px) rotate(270deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: neonPulse 3s ease-in-out infinite, gradientFlow 4s linear infinite;
+            text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            letter-spacing: 0.3rem;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .tagline {
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .author {
+            font-size: 2rem;
+            margin-top: 1rem;
+            color: #ff00ff;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+        }
+
+        section {
+            margin: 4rem 0;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00) 1;
+            backdrop-filter: blur(10px);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rotate 5s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes rotate {
+            from { filter: hue-rotate(0deg); }
+            to { filter: hue-rotate(360deg); }
+        }
+
+        .book {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255, 0, 255, 0.1);
+            border-left: 4px solid #ff00ff;
+            transition: all 0.3s ease;
+        }
+
+        .book:hover {
+            transform: translateX(10px);
+            background: rgba(255, 0, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+        }
+
+        .book h3 {
+            font-size: 1.8rem;
+            color: #ffff00;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon {
+            color: #00ffff;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        .shop-section {
+            text-align: center;
+        }
+
+        .shop-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 1rem;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-shadow: none;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
+
+        .gallery-placeholder {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .art-placeholder {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border: 3px solid #ffff00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8); }
+        }
+
+        .art-placeholder:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #00ffff;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        .social-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .contact {
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .contact a {
+            color: #ff00ff;
+            text-decoration: none;
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        }
+
+        .contact a:hover {
+            color: #ffff00;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            section { padding: 2rem 1rem; }
+            .social-links { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="floating-shape shape1"></div>
+    <div class="floating-shape shape2"></div>
+    <div class="floating-shape shape3"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">RF</div>
+            <div class="subtitle">REFRACTED-FRACTURES</div>
+            <div class="author">D. Courter</div>
+            <div class="tagline">
+                Davi's proof that fractured doesn't mean broken.<br>
+                It means refracted - like light, making rainbows out of chaos. 🌈🧠💫
+            </div>
+        </header>
+
+        <section>
+            <h2>📚 BOOKS</h2>
+            
+            <div class="book">
+                <h3>The Quantum Hourglass</h3>
+                <p class="coming-soon">Coming Soon</p>
+                <p>Time fractures. Reality bends. The hourglass holds more than sand.</p>
+            </div>
+
+            <div class="book">
+                <h3>Re-Evolution Trilogy</h3>
+                <p class="coming-soon">Coming Soon</p>
+                <p>Three books. One revolution. Evolution wasn't the end - it was the beginning.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>🎨 ART</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
+                Cosmic smileys, hand-drawn mandalas, psychedelic creatures, and refracted dimensions in digital form.
+            </p>
+            <div class="gallery-placeholder">
+                <div class="art-placeholder">Cosmic Smileys</div>
+                <div class="art-placeholder">Mandalas</div>
+                <div class="art-placeholder">Creatures</div>
+                <div class="art-placeholder">Abstract</div>
+            </div>
+        </section>
+
+        <section class="shop-section">
+            <h2>🛒 SHOP</h2>
+            <p class="shop-description">
+                Psychedelic wallpapers, mandala art, sticker packs & prints. Transform your digital space with infinite fractals. 🌈🧠✨💎
+            </p>
+            <a href="#" class="btn">Shop Coming Soon</a>
+            <p style="margin-top: 2rem; color: #ffff00; font-size: 0.9rem;">
+                (Add your Gumroad link here once set up!)
+            </p>
+            <p style="margin-top: 1rem; color: #ffff00;">
+                Wallpapers • Sticker Packs • Prints • Digital Art • Books
+            </p>
+        </section>
+
+        <section>
+            <h2>🔗 CONNECT</h2>
+            <div class="social-links">
+                <a href="https://twitter.com/refractfract" target="_blank" class="social-link">@refractfract on X</a>
+                <a href="https://github.com/Refracted-Fractures" target="_blank" class="social-link">GitHub</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>RF - Where reality refracts into possibility</p>
+            <p class="contact">
+                Contact: <a href="mailto:fractual.realities@gmail.com">fractual.realities@gmail.com</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">© 2026 Refracted-Fractures | D. Courter</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add some random floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 4 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = ['#ff00ff', '#00ffff', '#ffff00'][Math.floor(Math.random() * 3)];
+            particle.style.borderRadius = '50%';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.opacity = Math.random() * 0.5;
+            particle.style.filter = 'blur(2px)';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '5';
+            document.body.appendChild(particle);
+
+            // Animate
+            const duration = Math.random() * 10 + 10;
+            const startX = parseFloat(particle.style.left);
+            const startY = parseFloat(particle.style.top);
+            const endX = Math.random() * 100;
+            const endY = Math.random() * 100;
+            
+            particle.animate([
+                { left: startX + '%', top: startY + '%' },
+                { left: endX + '%', top: endY + '%' }
+            ], {
+                duration: duration * 1000,
+                iterations: Infinity,
+                direction: 'alternate',
+                easing: 'ease-in-out'
+            });
+        }
+
+        // Create initial particles
+        for (let i = 0; i < 20; i++) {
+            createParticle();
+        }
+
+        // Parallax scroll effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.floating-shape');
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.1;
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
